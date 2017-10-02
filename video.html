@@ -9,35 +9,27 @@
 <body>
 </body>
 <video id="player" controls autoplay></video>
-<script>  
-navigator.mediaDevices = navigator.mediaDevices || ((navigator.mozGetUserMedia || navigator.webkitGetUserMedia) ? {
-   getUserMedia: function(c) {
-     return new Promise(function(y, n) {
-       (navigator.mozGetUserMedia ||
-        navigator.webkitGetUserMedia).call(navigator, c, y, n);
-     });
-   }
-} : null);
+<button id="capture">Capture</button>
+<canvas id="snapshot" width=320 height=240></canvas>
+<script>
+  var player = document.getElementById('player'); 
+  var snapshotCanvas = document.getElementById('snapshot');
+  var captureButton = document.getElementById('capture');
 
-if (!navigator.mediaDevices) {
-  console.log("getUserMedia() not supported.");
-}
-
-// Prefer camera resolution nearest to 1280x720.
-
-var constraints = { audio: true, video: { width: 1280, height: 720 } };
-
-navigator.mediaDevices.getUserMedia(constraints)
-.then(function(stream) {
-  var video = document.querySelector('video');
-  video.src = window.URL.createObjectURL(stream);
-  video.onloadedmetadata = function(e) {
-    video.play();
+  var handleSuccess = function(stream) {
+    // Attach the video stream to the video element and autoplay.
+    player.srcObject = stream;
   };
-})
-.catch(function(err) {
-  console.log(err.name + ": " + err.message);
-});
+
+  captureButton.addEventListener('click', function() {
+    var context = snapshot.getContext('2d');
+    // Draw the video frame to the canvas.
+    context.drawImage(player, 0, 0, snapshotCanvas.width, 
+        snapshotCanvas.height);
+  });
+
+  navigator.mediaDevices.getUserMedia({video: true})
+      .then(handleSuccess);
 </script>
 
 </html>
