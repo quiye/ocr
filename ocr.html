@@ -40,7 +40,6 @@
 </head>
 
 <body>
-<form>
 <video id="player" controls autoplay></video>
 <button id="capture">Capture</button>
 <canvas id="snapshot" width=320 height=480></canvas>
@@ -54,17 +53,19 @@
     player.srcObject = stream;
   };
 
-  //captureButton.addEventListener('click', function() {
-    //var context = snapshot.getContext('2d');
+  captureButton.addEventListener('click', function() {
+    var context = snapshot.getContext('2d');
     // Draw the video frame to the canvas.
-    //context.drawImage(player, 0, 0, snapshotCanvas.width, 
-        //snapshotCanvas.height);
-  //});
+    context.drawImage(player, 0, 0, snapshotCanvas.width, 
+        snapshotCanvas.height);
+  });
 var front = false;
 var constraints = { video: { facingMode: (front? "user" : "environment") } };
   navigator.mediaDevices.getUserMedia(constraints)
       .then(handleSuccess);
 </script>
+    
+<form>
   <input type="file" accept="image/*;capture=camera" id="imageFile"/>
 </form>
 </body>
