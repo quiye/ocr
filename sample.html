@@ -49,13 +49,18 @@ function getVideoSources(callback) {
 </head>
 
 <body>
-  <div>
-    <video id="video" />
-  </div>
-  <form id="control"></form>
+  
+  <video id="player" controls autoplay></video>
+<button id="capture">Capture</button>
+<canvas id="snapshot" width=320 height=240></canvas>
+  
+  
   <script>
-    var video = document.getElementById("video");
-    var control = document.getElementById("control");
+//    var video = document.getElementById("video");
+//    var control = document.getElementById("control");
+      var player = document.getElementById('player'); 
+  var snapshotCanvas = document.getElementById('snapshot');
+  var captureButton = document.getElementById('capture');
 
     getVideoSources(function(cam) {
       console.log("cam", cam);
@@ -74,22 +79,27 @@ function getVideoSources(callback) {
     }
 
     function main(cam_id) {
-      navigator.mediaDevices.getUserMedia({
-        audio: false,
-        video: {
+      
+      
+      
+        var handleSuccess = function(stream) {
+    // Attach the video stream to the video element and autoplay.
+    player.srcObject = stream;
+  };
+  captureButton.addEventListener('click', function() {
+    var context = snapshot.getContext('2d');
+    // Draw the video frame to the canvas.
+    context.drawImage(player, 0, 0, snapshotCanvas.width, 
+        snapshotCanvas.height);
+  });
+  navigator.mediaDevices.getUserMedia(audio: false,video: {
           optional: [
             { sourceId: cam_id}
           ]
-        }
-      }, function(stream) { // success
-        console.log("Start Video", stream);
-        localStream = stream;
-        video.src = URL.createObjectURL(stream);
-        video.play();
-        video.volume = 0;
-      }, function(e) { // error
-        console.error("Error on start video: " + e.code);
-      });
+        })
+      .then(handleSuccess);
+
+      
     };
   </script>
 </body>
