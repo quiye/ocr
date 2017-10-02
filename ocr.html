@@ -65,8 +65,9 @@
     context.drawImage(player, 0, 0, snapshotCanvas.width, 
         snapshotCanvas.height);
   });
-
-  navigator.mediaDevices.getUserMedia({video: true})
+var front = false;
+var constraints = { video: { facingMode: (front? "user" : "environment") } };
+  navigator.mediaDevices.getUserMedia(constraints)
       .then(handleSuccess);
 </script>
   <input type="file" accept="image/*;capture=camera" id="imageFile"/>
