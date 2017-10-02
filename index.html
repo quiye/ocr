@@ -13,11 +13,11 @@
 //var Tesseract = require('tesseract.js')
 
 Tesseract
-  .recognize('i.jpg', {lang: 'jpn'})
+  .recognize('u.jpg', {lang: 'jpn'})
   //.ImageLike('img', 'jpn')  //* browser only img || video || canvas
   .progress(function(p) {
     console.log('progress', p)
-    document.write('progress', p)
+    document.write('progress', p.progress + "<BR>")
   })
   .then(function(result) {
     console.log(result)
