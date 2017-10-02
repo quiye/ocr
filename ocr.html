@@ -55,9 +55,24 @@
 
   captureButton.addEventListener('click', function() {
     var context = snapshot.getContext('2d');
+      
     // Draw the video frame to the canvas.
     context.drawImage(player, 0, 0, snapshotCanvas.width, 
         snapshotCanvas.height);
+      
+          Tesseract
+            .recognize(snapshot.toDataURL("image/jpeg"), {lang: 'jpn'})
+            //.ImageLike('img', 'jpn')  //* browser only img || video || canvas
+            .progress(function(p) {
+              console.log('progress', p)
+              document.write('progress', p.status+ " : " + p.progress )
+            })
+            .then(function(result) {
+              console.log(result)
+              document.write('<h1>' + result.text + '<h1>')
+          });
+      
+      
   });
 var front = false;
 var constraints = { video: { facingMode: (front? "user" : "environment") } };
