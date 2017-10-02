@@ -28,11 +28,10 @@
         snapshotCanvas.height);
   });
     var front = true;
-document.getElementById('flip-button').onclick = function() { front = !front; };
 
 var constraints = { video: { facingMode: (front? "user" : "environment") } };
     
-  navigator.mediaDevices.getUserMedia({video: true})
+  navigator.mediaDevices.getUserMedia(constraints)
       .then(handleSuccess);
 </script>
 
