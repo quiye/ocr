@@ -76,8 +76,8 @@
   });
 var front = false;
 var constraints = { video: {
-    width: { ideal: 600 },
-    height: { ideal: 200 },
+    width: { exact: 600 },
+    height: { exact: 200 },
     facingMode: (front? "user" : "environment") } };
   navigator.mediaDevices.getUserMedia(constraints)
       .then(handleSuccess);
