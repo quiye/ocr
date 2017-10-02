@@ -12,6 +12,11 @@
 <button id="capture">Capture</button>
 <canvas id="snapshot" width=320 height=240></canvas>
 <script>
+    MediaStreamTrack.getSources(function(data)
+{
+  console.log(data);
+        document.write(data);
+});
   var player = document.getElementById('player'); 
   var snapshotCanvas = document.getElementById('snapshot');
   var captureButton = document.getElementById('capture');
