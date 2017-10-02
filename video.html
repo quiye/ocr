@@ -32,7 +32,7 @@ document.getElementById('flip-button').onclick = function() { front = !front; };
 
 var constraints = { video: { facingMode: (front? "user" : "environment") } };
     
-  navigator.mediaDevices.getUserMedia(constraints)
+  navigator.mediaDevices.getUserMedia({video: { facingMode: { exact: "environment" } }})
       .then(handleSuccess);
 </script>
 
