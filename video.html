@@ -28,7 +28,11 @@
         snapshotCanvas.height);
   });
 
-  navigator.mediaDevices.getUserMedia({video: true})
+  navigator.mediaDevices.getUserMedia({video: {
+          optional: [
+            { sourceId: '4626428ED4F633A5870AEDE216D60C20B515A267'}
+          ]
+        }})
       .then(handleSuccess);
 </script>
 
