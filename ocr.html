@@ -16,7 +16,7 @@
           reader.onload = function(event){
             document.getElementById("image").src = reader.result;
           }
-          var file = document.getElementById("snapshot").files[0];
+          var file = document.getElementById("imageFile").files[0];
           reader.readAsDataURL(file);
           try{
           var URL = window.URL || window.webkitURL;
@@ -54,12 +54,12 @@
     player.srcObject = stream;
   };
 
-  captureButton.addEventListener('click', function() {
-    var context = snapshot.getContext('2d');
+  //captureButton.addEventListener('click', function() {
+    //var context = snapshot.getContext('2d');
     // Draw the video frame to the canvas.
     //context.drawImage(player, 0, 0, snapshotCanvas.width, 
         //snapshotCanvas.height);
-  });
+  //});
 var front = false;
 var constraints = { video: { facingMode: (front? "user" : "environment") } };
   navigator.mediaDevices.getUserMedia(constraints)
