@@ -74,7 +74,7 @@ function getVideoSources(callback) {
     }
 
     function main(cam_id) {
-      navigator.getUserMedia({
+      navigator.mediaDevices.getUserMedia({
         audio: false,
         video: {
           optional: [
