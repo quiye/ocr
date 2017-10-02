@@ -7,23 +7,19 @@
     <script src='https://cdn.rawgit.com/naptha/tesseract.js/1.0.7/dist/tesseract.js'></script>
     <script>
       window.addEventListener("load", function(){
-         
         if (!window.File){
           result.innerHTML = "File API 使用不可";
           return;
         }
-         
         document.getElementById("imageFile").addEventListener("change", function(){
           var reader = new FileReader();
-           
           reader.onload = function(event){
             document.getElementById("image").src = reader.result;
           }
-          var file = document.getElementById("imageFile").files[0];
+          var file = document.getElementById("snapshot").files[0];
           reader.readAsDataURL(file);
           try{
           var URL = window.URL || window.webkitURL;
-          
           console.log(URL.createObjectURL(file))
           }catch(e){
           }
@@ -38,7 +34,6 @@
               console.log(result)
               document.write('<h1>' + result.text + '<h1>')
           });
-          
         }, true);
       }, true);
     </script>
@@ -48,7 +43,7 @@
 <form>
 <video id="player" controls autoplay></video>
 <button id="capture">Capture</button>
-<canvas id="snapshot" width=320 height=240></canvas>
+<canvas id="snapshot" width=320 height=480></canvas>
 <script>
   var player = document.getElementById('player'); 
   var snapshotCanvas = document.getElementById('snapshot');
