@@ -92,11 +92,11 @@ function getVideoSources(callback) {
     context.drawImage(player, 0, 0, snapshotCanvas.width, 
         snapshotCanvas.height);
   });
-  navigator.mediaDevices.getUserMedia(audio: false,video: {
+  navigator.mediaDevices.getUserMedia({audio: false,video: {
           optional: [
             { sourceId: cam_id}
           ]
-        })
+        }})
       .then(handleSuccess);
 
       
