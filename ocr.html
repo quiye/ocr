@@ -75,7 +75,10 @@
       
   });
 var front = false;
-var constraints = { video: { facingMode: (front? "user" : "environment") } };
+var constraints = { video: {
+    width: { ideal: 600 },
+    height: { ideal: 200 },
+    facingMode: (front? "user" : "environment") } };
   navigator.mediaDevices.getUserMedia(constraints)
       .then(handleSuccess);
 </script>
@@ -84,5 +87,5 @@ var constraints = { video: { facingMode: (front? "user" : "environment") } };
   <input type="file" accept="image/*;capture=camera" id="imageFile"/>
 </form>
 </body>
-  <img id="image"width="200" height="200">
+  <img id="image"width="600" height="200">
 </html>
