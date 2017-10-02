@@ -17,7 +17,7 @@ Tesseract
   //.ImageLike('img', 'jpn')  //* browser only img || video || canvas
   .progress(function(p) {
     console.log('progress', p)
-    document.write('progress', p.progress + "<BR>")
+    document.write('progress', p.status+ " : " + p.progress + "<BR>")
   })
   .then(function(result) {
     console.log(result)
