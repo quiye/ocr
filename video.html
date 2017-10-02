@@ -27,14 +27,12 @@
     context.drawImage(player, 0, 0, snapshotCanvas.width, 
         snapshotCanvas.height);
   });
+    var front = false;
+document.getElementById('flip-button').onclick = function() { front = !front; };
 
-  navigator.mediaDevices.getUserMedia({video: {
-          optional: [
-//            { sourceId: '44c089e90bbf0fa2857532f42771493f545a66764fb9fd2980dcbef3853c56f7'}
-            { sourceId: '00C74734EC92254B61899D89E84F85920418B832'}
-
-          ]
-        }})
+var constraints = { video: { facingMode: (front? "user" : "environment") } };
+    
+  navigator.mediaDevices.getUserMedia(constraints)
       .then(handleSuccess);
 </script>
 
