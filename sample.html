@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Simple Camera</title>
+</head>
+
+<body>
+  <div>
+    <video id="video" />
+  </div>
+  <form id="control"></form>
+  <script src="constants.js"></script>
+  <script>
+    var video = document.getElementById("video");
+    var control = document.getElementById("control");
+
+    getVideoSources(function(cam) {
+      console.log("cam", cam);
+      var b = document.createElement("input");
+      b.type = "button";
+      b.value = cam.name;
+      b.onclick = getMain(cam.id);
+      control.appendChild(b);
+      console.log('add button');
+    });
+
+    function getMain(cam_id) {
+      return function() {
+        main(cam_id);
+      };
+    }
+
+    function main(cam_id) {
+      navigator.getUserMedia({
+        audio: false,
+        video: {
+          optional: [
+            { sourceId: cam_id}
+          ]
+        }
+      }, function(stream) { // success
+        console.log("Start Video", stream);
+        localStream = stream;
+        video.src = URL.createObjectURL(stream);
+        video.play();
+        video.volume = 0;
+      }, function(e) { // error
+        console.error("Error on start video: " + e.code);
+      });
+    };
+  </script>
+</body>
+
+</html>
