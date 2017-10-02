@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="theme-color" content="#FFFFFF">
+    <script src='https://cdn.rawgit.com/naptha/tesseract.js/1.0.7/dist/tesseract.js'></script>
+    <script>
+      window.addEventListener("load", function(){
+         
+        if (!window.File){
+          result.innerHTML = "File API 使用不可";
+          return;
+        }
+         
+        document.getElementById("imageFile").addEventListener("change", function(){
+          var reader = new FileReader();
+           
+          reader.onload = function(event){
+            document.getElementById("image").src = reader.result;
+          }
+          var file = document.getElementById("imageFile").files[0];
+          reader.readAsDataURL(file);
+          try{
+          var URL = window.URL || window.webkitURL;
+          
+          console.log(URL.createObjectURL(file))
+          }catch(e){
+          }
+          Tesseract
+            .recognize(URL.createObjectURL(file), {lang: 'jpn'})
+            //.ImageLike('img', 'jpn')  //* browser only img || video || canvas
+            .progress(function(p) {
+              console.log('progress', p)
+              document.write('progress', p.status+ " : " + p.progress )
+            })
+            .then(function(result) {
+              console.log(result)
+              document.write('<h1>' + result.text + '<h1>')
+          });
+          
+        }, true);
+      }, true);
+    </script>
+</head>
+
+<body>
+<form>
+<video id="player" controls autoplay></video>
+<button id="capture">Capture</button>
+<canvas id="snapshot" width=320 height=240></canvas>
+<script>
+  var player = document.getElementById('player'); 
+  var snapshotCanvas = document.getElementById('snapshot');
+  var captureButton = document.getElementById('capture');
+
+  var handleSuccess = function(stream) {
+    // Attach the video stream to the video element and autoplay.
+    player.srcObject = stream;
+  };
+
+  captureButton.addEventListener('click', function() {
+    var context = snapshot.getContext('2d');
+    // Draw the video frame to the canvas.
+    context.drawImage(player, 0, 0, snapshotCanvas.width, 
+        snapshotCanvas.height);
+  });
+
+  navigator.mediaDevices.getUserMedia({video: true})
+      .then(handleSuccess);
+</script>
+  <input type="file" accept="image/*;capture=camera" id="imageFile"/>
+</form>
+</body>
+  <img id="image"width="200" height="200">
+</html>
