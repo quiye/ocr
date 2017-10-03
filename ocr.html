@@ -3,7 +3,8 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="theme-color" content="#FFFFFF">
+     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no" />
+    <link rel="stylesheet" href="index.css" />
     <script src='https://cdn.rawgit.com/naptha/tesseract.js/1.0.7/dist/tesseract.js'></script>
     <script>
       window.addEventListener("load", function(){
@@ -39,29 +40,50 @@
     </script>
 </head>
 
+<video id="player" controls autoplay playsinline></video><br>
 <body>
-<video id="player" controls autoplay></video><br>
 <button id="capture">　　　　　　　　　Capture　　　　　　　　　</button><br>
-<canvas id="snapshot" width=375 height=667></canvas><br>
+<canvas id="canvas"></canvas><br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<canvas id="snapshot" width=300 height=100></canvas><br>
+<div id="hoge">
+</div>
 <script>
-  var player = document.getElementById('player'); 
+var video  = document.getElementById("player"),
+      canvas = document.getElementById("canvas"),
+      ctx    = canvas.getContext("2d");
+requestAnimationFrame(draw);
+function draw() {
+//canvas.width  = 400;
+canvas.width  = window.innerWidth;
+//canvas.height = 200;
+canvas.height = window.innerHeight;
+ctx.drawImage(video, 100, 300, 300, 100,
+                     0, 0, 300, 100);
+
+requestAnimationFrame(draw);
+}
   var snapshotCanvas = document.getElementById('snapshot');
   var captureButton = document.getElementById('capture');
 
   var handleSuccess = function(stream) {
     // Attach the video stream to the video element and autoplay.
-    player.srcObject = stream;
+    video.srcObject = stream;
   };
 
   captureButton.addEventListener('click', function() {
     var context = snapshot.getContext('2d');
       
     // Draw the video frame to the canvas.
-    context.drawImage(player, 0, 0, snapshotCanvas.width, 
+    context.drawImage(video,100, 300, 300, 100, 0, 0, snapshotCanvas.width, 
         snapshotCanvas.height);
       
           Tesseract
-            .recognize(snapshot.toDataURL("image/jpeg"), {lang: 'jpn'})
+            .recognize(canvas.toDataURL("image/jpeg"), {lang: 'jpn'})
             //.ImageLike('img', 'jpn')  //* browser only img || video || canvas
             .progress(function(p) {
               console.log('progress', p)
@@ -75,9 +97,16 @@
       
   });
 var front = false;
-var constraints = { video: {
-    //width: 200,
-    //height: 600,
+var constraints = { video: 
+{
+optional: [
+    {minWidth: 320},
+    {minWidth: 640},
+    {minWidth: 1024},
+    {minWidth: 1280},
+    {minWidth: 1920},
+    {minWidth: 2560},
+  ],
     facingMode: (front? "user" : "environment") } };
   navigator.mediaDevices.getUserMedia(constraints)
       .then(handleSuccess);
