@@ -3,9 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no, minimal-ui">
     <!-- meta name="apple-mobile-web-app-capable" content="yes" -->
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <link rel="stylesheet" href="index.css" />
     <script src='https://cdn.rawgit.com/naptha/tesseract.js/1.0.7/dist/tesseract.js'></script>
     <script>
@@ -51,7 +49,7 @@
 <br>
 <br>
 <br>
-<canvas id="snapshot" width=300 height=100></canvas><br>
+<canvas id="snapshot" width=600 height=200></canvas><br>
 <div id="hoge">
 </div>
 <script>
@@ -65,7 +63,7 @@ canvas.width  = window.innerWidth;
 //canvas.height = 200;
 canvas.height = window.innerHeight;
 ctx.drawImage(video, 100, 300, 300, 100,
-                     0, 0, 300, 100);
+                     0, 0, 600, 200);
 
 imgData = ctx.getImageData(0,0,canvas.width,canvas.height);
 data=imgData.data;
@@ -114,15 +112,7 @@ requestAnimationFrame(draw);
   });
 var front = false;
 var constraints = { video: 
-{
-optional: [
-    {minWidth: 320},
-    {minWidth: 640},
-    {minWidth: 1024},
-    {minWidth: 1280},
-    {minWidth: 1920},
-    {minWidth: 2560},
-  ],
+{ width: 1400, height: 1400,
     facingMode: (front? "user" : "environment") } };
   navigator.mediaDevices.getUserMedia(constraints)
       .then(handleSuccess);
