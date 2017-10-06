@@ -65,6 +65,20 @@ canvas.height = window.innerHeight;
 ctx.drawImage(video, 100, 300, 300, 100,
                      0, 0, 300, 100);
 
+imgData = ctx.getImageData(0,0,canvas.width,canvas.height);
+data=imgData.data;
+for (let i = 0; i < data.length; i += 4) {
+  ave = (data[i + 0] + data[i + 1] + data[i + 2]) / 3;
+
+  data[i + 0] = 
+  data[i + 1] = 
+  data[i + 2] = (ave > 255 / 2) ? 255 :  0;
+  data[i + 3] = 255;
+}
+
+ctx.putImageData(imgData, 0, 0);
+
+
 requestAnimationFrame(draw);
 }
   var snapshotCanvas = document.getElementById('snapshot');
