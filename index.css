@@ -11,10 +11,8 @@ body {
 }
 
 #player {
- display: none;!important;
-  position: absolute;
-  width: 0;
-  height: 0;
+  width: 1%;
+  height: 1%;
 }
 .button {
   text-align: center;
@@ -28,15 +26,21 @@ font-size: 1.4em;
 background-color: #248;
 color: #fff;
 border-style: none;
-
-
+}
+#snapshotbutton{
+padding: 10px 30px;
+font-weight: bold;
+font-size: 1.4em;
+background-color: #248;
+color: #fff;
+border-style: none;
 }
 #video {
   width: 0%;
   height: 0%;
 /*  transform: rotateZ(180deg); /* なぜか天地反転するので天地反転し返す */
 }
-#canvas {
+.canvas {
   display: block;
   text-align: center;
   width: 300; 

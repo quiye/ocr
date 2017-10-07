@@ -6,8 +6,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no, minimal-ui">
     <!-- meta name="apple-mobile-web-app-capable" content="yes" -->
     <link rel="stylesheet" href="index.css" />
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src='https://cdn.rawgit.com/naptha/tesseract.js/1.0.7/dist/tesseract.js'></script>
     <script>
+  (function () {
+    Tesseract
+      .recognize("u.jpg", {lang: 'jpn'})
+      .progress(function(p) {
+           $("#msg").text('初期化ちゅう🐹')
+      })
+      .then(function(result) {
+        console.log(result)
+           $("#msg").text('初期化おわり🐸')
+      });
+  }());
       window.addEventListener("load", function(){
         if (!window.File){
           result.innerHTML = "File API 使用不可";
@@ -30,11 +42,13 @@
             //.ImageLike('img', 'jpn')  //* browser only img || video || canvas
             .progress(function(p) {
               console.log('progress', p)
-              document.write('progress', p.status+ " : " + p.progress )
+                 $("#msg").text('progress'+ p.status+ " : " + p.progress )
+              //document.write('progress', p.status+ " : " + p.progress )
             })
             .then(function(result) {
               console.log(result)
-              document.write('<h1>' + result.text + '<h1>')
+              //document.write('<h1>' + result.text + '<h1>')
+                 $("#msg").text('<h1>' + result.text + '<h1>')
           });
         }, true);
       }, true);
@@ -42,8 +56,10 @@
 </head>
 <video id="player" controls autoplay playsinline></video>
 <body><br>
-<div class="button"><button id="capture">    Capture    </button></div><br>
+<div id='msg' align=center></div><br>
 <div class="canvas"><canvas id="canvas" width=300 height=100></canvas><div><br>
+<div class="button"><button id="snapshotbutton">Snapshot</button></div> 
+<div class="button"><button id="capture">Capture</button></div><br>
 <canvas id="snapshot" width=300 height=100></canvas><br>
 <script>
 var video  = document.getElementById("player"),
@@ -53,10 +69,10 @@ requestAnimationFrame(draw);
 function draw() {
 canvas.width  = 300;
 canvas.height = 100;
-canvas.width  = window.innerWidth;
-canvas.height = window.innerHeight;
+//canvas.width  = window.innerWidth;
+//canvas.height = window.innerHeight;
 ctx.drawImage(video, 100, 300, 600, 200,
-                     canvas.width/2 - 300/2, 0, 300, 100);
+                     0, 0, 300, 100);
 imgData = ctx.getImageData(0,0,canvas.width,canvas.height);
 data=imgData.data;
 for (let i = 0; i < data.length; i += 4) {
@@ -71,24 +87,45 @@ requestAnimationFrame(draw);
 }
   var snapshotCanvas = document.getElementById('snapshot');
   var captureButton = document.getElementById('capture');
+  var snapshotButton = document.getElementById('snapshotbutton');
   var handleSuccess = function(stream) {
     video.srcObject = stream;
   };
   captureButton.addEventListener('click', function() {
     var context = snapshot.getContext('2d');
-    context.drawImage(video,100, 300, 300, 100, 0, 0, snapshotCanvas.width, 
+    context.drawImage(video,100, 300, 600, 200, 0, 0, snapshotCanvas.width, 
         snapshotCanvas.height);
           Tesseract
             .recognize(canvas.toDataURL("image/jpeg"), {lang: 'jpn'})
+            //.recognize(snapshot.toDataURL("image/jpeg"), {lang: 'jpn'})
             //.ImageLike('img', 'jpn')  //* browser only img || video || canvas
             .progress(function(p) {
-              console.log('progress', p)
-              document.write('progress', p.status+ " : " + p.progress )
+                 $("#msg").text('progress'+ p.status+ " : " + p.progress )
+              //document.write('progress', p.status+ " : " + p.progress )
             })
             .then(function(result) {
               console.log(result)
-              document.write('<h1>' + result.text + '<h1>')
-          });
+              //document.write('<h1>' + result.text + '<h1>')
+                 $("#msg").text('<h1>' + result.text + '<h1>')
+            });
+  });
+  snapshotButton.addEventListener('click', function() {
+    var context = snapshot.getContext('2d');
+    context.drawImage(video,100, 300, 600, 200, 0, 0, snapshotCanvas.width, 
+        snapshotCanvas.height);
+          Tesseract
+            //.recognize(canvas.toDataURL("image/jpeg"), {lang: 'jpn'})
+            .recognize(snapshot.toDataURL("image/jpeg"), {lang: 'jpn'})
+            //.ImageLike('img', 'jpn')  //* browser only img || video || canvas
+            .progress(function(p) {
+                 $("#msg").text('progress'+ p.status+ " : " + p.progress )
+              //document.write('progress', p.status+ " : " + p.progress )
+            })
+            .then(function(result) {
+              console.log(result)
+              //document.write('<h1>' + result.text + '<h1>')
+                 $("#msg").text('<h1>' + result.text + '<h1>')
+            });
   });
 var front = false;
 var constraints = {audio:false, video: 
