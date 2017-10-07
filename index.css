@@ -46,3 +46,7 @@ border-style: none;
   width: 300; 
   height: 100;
 }
+.snapshot {
+  width: 50%; 
+  height: 50%;
+}

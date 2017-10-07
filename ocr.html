@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no, minimal-ui">
@@ -13,54 +12,21 @@
     Tesseract
       .recognize("u.jpg", {lang: 'jpn'})
       .progress(function(p) {
-           $("#msg").text('用意ちう🐹:'+p.status+(100*p.progress).toFixed(1)+'%')
+           $("#msg").text('用意ちう🐹: '+p.status+": "+(100*p.progress).toFixed(1)+'%')
       })
       .then(function(result) {
-        console.log(result)
            $("#msg").text('準備完了🐸')
       });
   }());
-      window.addEventListener("load", function(){
-        if (!window.File){
-          result.innerHTML = "File API 使用不可";
-          return;
-        }
-        document.getElementById("imageFile").addEventListener("change", function(){
-          var reader = new FileReader();
-          reader.onload = function(event){
-            document.getElementById("image").src = reader.result;
-          }
-          var file = document.getElementById("imageFile").files[0];
-          reader.readAsDataURL(file);
-          try{
-          var URL = window.URL || window.webkitURL;
-          console.log(URL.createObjectURL(file))
-          }catch(e){
-          }
-          Tesseract
-            .recognize(URL.createObjectURL(file), {lang: 'jpn'})
-            .progress(function(p) {
-              console.log('progress', p)
-                 $("#msg").text('progress'+ p.status+ " : " + p.progress )
-              //document.write('progress', p.status+ " : " + p.progress )
-            })
-            .then(function(result) {
-              console.log(result)
-              //document.write('<h1>' + result.text + '<h1>')
-                 $("#msg").text('<h1>' + result.text + '<h1>')
-          });
-        }, true);
-      }, true);
     </script>
 </head>
+<body>
 <video id="player" controls autoplay playsinline></video>
-<body><br>
-<div id='msg' align=center></div><br>
-<div class="canvas"><canvas id="canvas" width=300 height=100></canvas><div><br>
-<div class="button"><button id="captureeng">Capture(ENG)</button></div> 
-<div class="button"><button id="capture">撮影する(日本語)</button></div><br>
+<div class="canvas"><canvas id="canvas" width=300 height=100></canvas><div>
+<div class="button"><button id="captureeng">Capture English</button></div> 
+<div class="button"><button id="capture">日本語を撮影する</button></div>
+<div id='msg' align=center></div>
 <canvas id="snapshot" width=300 height=100></canvas><br>
-<div id="image-box"><img /></div>
 <script>
 var video  = document.getElementById("player"),
       canvas = document.getElementById("canvas"),
@@ -69,8 +35,6 @@ requestAnimationFrame(draw);
 function draw() {
 canvas.width  = 300;
 canvas.height = 100;
-//canvas.width  = window.innerWidth;
-//canvas.height = window.innerHeight;
 ctx.drawImage(video, 100, 300, 600, 200,
                      0, 0, 300, 100);
 imgData = ctx.getImageData(0,0,canvas.width,canvas.height);
@@ -92,49 +56,59 @@ requestAnimationFrame(draw);
   var handleSuccess = function(stream) {
     video.srcObject = stream;
   };
+  var num=1;
+  
   captureButton.addEventListener('click', function() {
     var context = snapshot.getContext('2d');
     context.drawImage(video,100, 300, 600, 200, 0, 0, snapshotCanvas.width, 
         snapshotCanvas.height);
     const url=snapshot.toDataURL("image/jpeg");
-    var elem=document.createElement('div');
-    elem.innerHTML="<div><img src="+url+" /></div><br>"
-    var parent=document.getElementById("results");
-    parent.insertBefore(elem,parent.firstChild);
-    var imgp=new Image();
-    imgp.onload=function(){
-      $("#image-box").children("img").attr({'src':url});
-    }
-    imgp.src=url;
-          Tesseract
-            //.recognize(canvas.toDataURL("image/jpeg"), {lang: 'jpn'})
-            .recognize(url, {lang: 'jpn'})
-            .progress(function(p) {
-                 $("#msg").text('progress'+ p.status+ " : " + p.progress )
-            })
-            .then(function(result) {
-              console.log(result)
-              //document.write('<h1>' + result.text + '<h1>')
-                 $("#msg").text('<h1>' + result.text + '<h1>')
-            });
+    Tesseract
+      .recognize(url, {lang: 'jpn'})
+      .progress(function(p) {
+           $("#msg").text(p.status+ ": " + p.progress )
+      })
+      .then(function(result) {
+        console.log(result)
+           $("#msg").text("Progress Complete")
+           var elem=document.createElement('div');
+           elem.innerHTML="<div id="+num+"><img src="+url+" /></div><br>"
+           var parent=document.getElementById("results");
+           parent.insertBefore(elem,parent.firstChild);
+           var numdiv=document.getElementById(num);
+           var msg=document.createElement('div');
+           msg.innerHTML=result.text;
+           numdiv.appendChild(msg);
+           num+=1;
+      });
   });
   captureButtoneng.addEventListener('click', function() {
     var context = snapshot.getContext('2d');
     context.drawImage(video,100, 300, 600, 200, 0, 0, snapshotCanvas.width, 
         snapshotCanvas.height);
-          Tesseract
-            .recognize(snapshot.toDataURL("image/jpeg"), {lang: 'eng'})
-            .progress(function(p) {
-                 $("#msg").text('progress'+ p.status+ " : " + p.progress )
-            })
-            .then(function(result) {
-              console.log(result)
-                 $("#msg").text('<h1>' + result.text + '<h1>')
-            });
+    const url=snapshot.toDataURL("image/jpeg");
+    Tesseract
+      .recognize(url, {lang: 'eng'})
+      .progress(function(p) {
+           $("#msg").text(p.status+ ": " + p.progress )
+      })
+      .then(function(result) {
+        console.log(result)
+           $("#msg").text("Progress Complete")
+           var elem=document.createElement('div');
+           elem.innerHTML="<div id="+num+"><img src="+url+" /></div><br>"
+           var parent=document.getElementById("results");
+           parent.insertBefore(elem,parent.firstChild);
+           var numdiv=document.getElementById(num);
+           var msg=document.createElement('div');
+           msg.innerHTML=result.text;
+           numdiv.appendChild(msg);
+           num+=1;
+      });
   });
 var front = false;
 var constraints = {audio:false, video: 
-{ width: 1280, height: 1280,
+{ width: 1920, height: 1080,
     facingMode: (front? "user" : "environment") } };
   navigator.mediaDevices.getUserMedia(constraints).then(handleSuccess);
 </script>
