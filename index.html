@@ -16,7 +16,7 @@
                     lang: 'jpn'
                 })
                 .progress(function(p) {
-                    $("#msg").text('用意ちう🐹: ' + p.status + ": " + (100 * p.progress).toFixed(1) + '%')
+                    $("#msg").text('準備中🐹 <' + p.status + ": " + (100 * p.progress).toFixed(1) + '%>')
                 })
                 .then(function(result) {
                     $("#msg").text('準備完了🐸')
