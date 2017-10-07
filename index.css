@@ -11,8 +11,8 @@ body {
 }
 
 #player {
-  width: 1%;
-  height: 1%;
+  width: 0.5%;
+  height: 0%;
 }
 .button {
   text-align: center;
@@ -23,11 +23,11 @@ body {
 padding: 10px 30px;
 font-weight: bold;
 font-size: 1.4em;
-background-color: #248;
+background-color: #842;
 color: #fff;
 border-style: none;
 }
-#snapshotbutton{
+#captureeng{
 padding: 10px 30px;
 font-weight: bold;
 font-size: 1.4em;
