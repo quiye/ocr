@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no, minimal-ui">
     <!-- meta name="apple-mobile-web-app-capable" content="yes" -->
     <link rel="stylesheet" href="index.css" />
     <script src='https://cdn.rawgit.com/naptha/tesseract.js/1.0.7/dist/tesseract.js'></script>
@@ -39,63 +40,44 @@
       }, true);
     </script>
 </head>
-
-<video id="player" controls autoplay playsinline></video><br>
-<body>
-<button id="capture">　　　　　　　　　Capture　　　　　　　　　</button><br>
-<canvas id="canvas"></canvas><br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<canvas id="snapshot" width=600 height=200></canvas><br>
-<div id="hoge">
-</div>
+<video id="player" controls autoplay playsinline></video>
+<body><br>
+<div class="button"><button id="capture">    Capture    </button></div><br>
+<div class="canvas"><canvas id="canvas" width=300 height=100></canvas><div><br>
+<canvas id="snapshot" width=300 height=100></canvas><br>
 <script>
 var video  = document.getElementById("player"),
       canvas = document.getElementById("canvas"),
       ctx    = canvas.getContext("2d");
 requestAnimationFrame(draw);
 function draw() {
-//canvas.width  = 400;
+canvas.width  = 300;
+canvas.height = 100;
 canvas.width  = window.innerWidth;
-//canvas.height = 200;
 canvas.height = window.innerHeight;
-ctx.drawImage(video, 100, 300, 300, 100,
-                     0, 0, 600, 200);
-
+ctx.drawImage(video, 100, 300, 600, 200,
+                     canvas.width/2 - 300/2, 0, 300, 100);
 imgData = ctx.getImageData(0,0,canvas.width,canvas.height);
 data=imgData.data;
 for (let i = 0; i < data.length; i += 4) {
   ave = (data[i + 0] + data[i + 1] + data[i + 2]) / 3;
-
   data[i + 0] = 
   data[i + 1] = 
-  data[i + 2] = (ave > 255 / 2) ? 255 :  0;
+  data[i + 2] = (ave > 128) ? 255 :  0;
   data[i + 3] = 255;
 }
-
 ctx.putImageData(imgData, 0, 0);
-
-
 requestAnimationFrame(draw);
 }
   var snapshotCanvas = document.getElementById('snapshot');
   var captureButton = document.getElementById('capture');
-
   var handleSuccess = function(stream) {
-    // Attach the video stream to the video element and autoplay.
     video.srcObject = stream;
   };
-
   captureButton.addEventListener('click', function() {
     var context = snapshot.getContext('2d');
-      
-    // Draw the video frame to the canvas.
     context.drawImage(video,100, 300, 300, 100, 0, 0, snapshotCanvas.width, 
         snapshotCanvas.height);
-      
           Tesseract
             .recognize(canvas.toDataURL("image/jpeg"), {lang: 'jpn'})
             //.ImageLike('img', 'jpn')  //* browser only img || video || canvas
@@ -107,19 +89,12 @@ requestAnimationFrame(draw);
               console.log(result)
               document.write('<h1>' + result.text + '<h1>')
           });
-      
-      
   });
 var front = false;
-var constraints = { video: 
+var constraints = {audio:false, video: 
 { width: 1400, height: 1400,
     facingMode: (front? "user" : "environment") } };
-  navigator.mediaDevices.getUserMedia(constraints)
-      .then(handleSuccess);
+  navigator.mediaDevices.getUserMedia(constraints).then(handleSuccess);
 </script>
-    
-<form>
-  <input type="file" accept="image/*;capture=camera" id="imageFile"/>
-</form>
 </body>
 </html>
