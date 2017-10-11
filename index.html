@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="index.css" />
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="https://cdn.rawgit.com/naptha/tesseract.js/1.0.7/dist/tesseract.js"></script>
+    <script src="data.js"></script>
     <script>
         (function() {
             Tesseract
@@ -43,7 +44,7 @@
                 canvas = document.getElementById("canvas"),
                 ctx = canvas.getContext("2d");
             requestAnimationFrame(draw);
-    
+
             function draw() {
                 canvas.width = 300;
                 canvas.height = 100;
@@ -61,6 +62,41 @@
                 ctx.putImageData(imgData, 0, 0);
                 requestAnimationFrame(draw);
             }
+            function search(query) {
+              // 入力の分割
+              splitter = query.split('');
+              //スコア格納
+              var score={};
+
+              splitter.forEach(function(moji) {
+                humans.forEach(function(human) {
+                try{
+                  if (~human.name.indexOf(moji)) {
+                    if(human.name in score){
+                      score[human.name]+=1;
+                    }else{
+                      score[human.name]=1;
+                    }
+                  }
+                  }catch(e){
+                    }
+                });
+              });
+              var clean_score=[];
+              for (let i in score){
+              clean_score.push({name:i,scor:score[i]});
+              }
+              clean_score.sort(function(a,b){
+              if(a['scor']>b['scor']){return -1;}
+              else{return 1;}
+              }
+              )
+              console.log(clean_score);
+              return clean_score[0]['name']+" 点数は"+ clean_score[0]['scor'];
+            }
+
+            search('太陽の化身アバター丸犬猿')
+
             var snapshotCanvas = document.getElementById('snapshot');
             var captureButton = document.getElementById('capture');
             var captureButtoneng = document.getElementById('captureeng');
@@ -69,7 +105,7 @@
                 video.srcObject = stream;
             };
             var num = 1;
-    
+
             captureButton.addEventListener('click', function() {
                 var context = snapshot.getContext('2d');
                 context.drawImage(video, 100, 300, 600, 200, 0, 0, snapshotCanvas.width,
@@ -91,7 +127,10 @@
                         parent.insertBefore(elem, parent.firstChild);
                         var numdiv = document.getElementById(num);
                         var msg = document.createElement('div');
-                        msg.innerHTML = result.text;
+                        //msg.innerHTML = result.text;
+
+                        msg.innerHTML = result.text + ' :<br>'+search(result.text);
+
                         numdiv.appendChild(msg);
                         num += 1;
                     });
@@ -138,3 +177,4 @@
 <div id="results" align="center"></div>
 
 </html>
+
