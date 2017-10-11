@@ -66,36 +66,53 @@
               // 入力の分割
               splitter = query.split('');
               //スコア格納
-              var score={};
+              var result={};
 
               splitter.forEach(function(moji) {
                 humans.forEach(function(human) {
                 try{
                   if (~human.name.indexOf(moji)) {
-                    if(human.name in score){
-                      score[human.name]+=1;
+                    if(human.name in result){
+                      const tmpname=human.name
+                      if (human.name.lastIndexOf(moji) > result[human.name].last) {
+                        result[human.name].score+=10;
+                        result[human.name].last=human.name.indexOf(moji);
+                      }else{
+                        result[human.name].score+=1;
+                      }
                     }else{
-                      score[human.name]=1;
+                      //result[human.name]=10;
+                      //result[human.last]=human.name.indexOf(moji);
+
+                      result[human.name]={last:human.name.indexOf(moji),score:10}
                     }
                   }
                   }catch(e){
                     }
                 });
               });
-              var clean_score=[];
-              for (let i in score){
-              clean_score.push({name:i,scor:score[i]});
+              var clean_result=[];
+              for (let i in result){
+              clean_result.push({name:i,scor:result[i].score/i.length});
               }
-              clean_score.sort(function(a,b){
+              clean_result.sort(function(a,b){
               if(a['scor']>b['scor']){return -1;}
               else{return 1;}
               }
               )
-              console.log(clean_score);
-              return clean_score[0]['name']+" 点数は"+ clean_score[0]['scor'];
+              console.log(clean_result);
+              console.log(result);
+              try{
+              return clean_result[0]['name']+" 点数は"+ clean_result[0]['scor']+'<br>'
+              + clean_result[1]['name']+" 点数は"+ clean_result[1]['scor']+'<br>'
+              + clean_result[2]['name']+" 点数は"+ clean_result[2]['scor']+'<br>';
+              }catch(e){
+              return e
+              }
             }
 
-            search('太陽の化身アバター丸犬猿')
+            search('太陽の化身アバター丸 犬猿')
+            search('岡　千　明')
 
             var snapshotCanvas = document.getElementById('snapshot');
             var captureButton = document.getElementById('capture');
@@ -130,6 +147,7 @@
                         //msg.innerHTML = result.text;
 
                         msg.innerHTML = result.text + ' :<br>'+search(result.text);
+
 
                         numdiv.appendChild(msg);
                         num += 1;
